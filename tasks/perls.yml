@@ -1,0 +1,9 @@
+# roles/perlbrew/tasks/perls.yml
+---
+- name: perls | install perl (this may take a while)
+  shell: "{{ perlbrew_bin }} install {{ item }}"
+  args:
+    creates: "{{ perlbrew_root }}/perls/{{ item }}"
+  environment:
+    PERLBREW_ROOT: "{{ perlbrew_root }}"
+  with_items: '{{ perlbrew_perls }}'

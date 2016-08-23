@@ -1,0 +1,5 @@
+# roles/perlbrew/defaults/main.yml
+---
+perlbrew_root: /opt/perlbrew
+perlbrew_perls: []
+#  - perl-5.18.4

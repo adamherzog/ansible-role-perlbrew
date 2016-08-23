@@ -1,0 +1,5 @@
+# roles/perlbrew/tasks/main.yml
+# Heavily based on https://github.com/jhthorsen/ansible-perlbrew
+---
+- include: install.yml
+- include: perls.yml

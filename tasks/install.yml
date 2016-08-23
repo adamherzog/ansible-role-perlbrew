@@ -1,0 +1,46 @@
+# roles/perlbrew/tasks/install.yml
+---
+- name: install | install package prerequisites
+  yum:
+    name: '{{ item }}'
+    state: present
+  with_items:
+    - curl
+    - gcc
+    - make
+    - bzip2
+    - patch
+    - perl
+
+- name: install | create perlbrew root directory
+  file:
+    path: "{{ perlbrew_root }}"
+    owner: root
+    group: root
+    mode: 0755
+    state: directory
+
+- set_fact:
+    perlbrew_bin: "{{ perlbrew_root }}/bin/perlbrew"
+
+- name: install | install perlbrew
+  script: perlbrew-install
+  environment:
+    PERLBREW_ROOT: "{{ perlbrew_root }}"
+  args:
+    creates: "{{ perlbrew_bin }}"
+
+- name: perls | install cpanm
+  shell: "{{ perlbrew_bin }} install-cpanm"
+  args:
+    creates: "{{ perlbrew_root }}/bin/cpanm"
+  environment:
+    PERLBREW_ROOT: "{{ perlbrew_root }}"
+
+- name: install | create system-wide perlbrew profile script
+  template:
+    dest: /etc/profile.d/perlbrew.sh
+    src: perlbrew.sh.j2
+    owner: root
+    group: root
+    mode: 0644
